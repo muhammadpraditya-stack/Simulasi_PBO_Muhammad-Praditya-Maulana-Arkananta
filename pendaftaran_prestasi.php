@@ -1,13 +1,10 @@
 <?php
-// Menyisipkan file induk abstract class
 require_once 'pendaftaran.php';
 
 class PendaftaranPrestasi extends Pendaftaran {
-    // Properti tambahan spesifik jalur Prestasi
     private $jenisPrestasi;
     private $tingkatPrestasi;
 
-    // Konstruktor untuk memetakan data dari database ke properti objek
     public function __construct($data) {
         parent::__construct();
         $this->id_pendaftaran         = $data['id_pendaftaran'];
@@ -15,19 +12,13 @@ class PendaftaranPrestasi extends Pendaftaran {
         $this->asal_sekolah           = $data['asal_sekolah'];
         $this->nilai_ujian             = $data['nilai_ujian'];
         $this->biayaPendaftaranDasar   = $data['biaya_pendaftaran_dasar'];
-        
-        // Mengisi properti spesifik
         $this->jenisPrestasi          = $data['jenis_prestasi'];
         $this->tingkatPrestasi         = $data['tingkat_prestasi'];
     }
 
-    // =========================================================================
-    // METODE QUERY SPESIFIK
-    // =========================================================================
     public function getDaftarPrestasi() {
         $query = "SELECT * FROM tabel_pendaftaran WHERE jalur_pendaftaran = 'Prestasi'";
         $result = $this->koneksi->query($query);
-        
         $daftar = [];
         if ($result && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
@@ -37,16 +28,18 @@ class PendaftaranPrestasi extends Pendaftaran {
         return $daftar;
     }
 
-    // Implementasi wajib dari metode abstrak induk (logika bisnis akan di-override di Tahap 5)
+    // =========================================================================
+    // METHOD OVERRIDING - JALUR PRESTASI
+    // =========================================================================
     public function hitungTotalBiaya() {
-        return $this->biayaPendaftaranDasar;
+        // Biaya dasar dikurangi potongan apresiasi Rp50.000
+        return $this->biayaPendaftaranDasar - 50000;
     }
 
     public function tampilkanInfoJalur() {
         return "Prestasi: " . $this->jenisPrestasi . " (" . $this->tingkatPrestasi . ")";
     }
 
-    // Fungsi Getter untuk kebutuhan Dashboard View
     public function getId() { return $this->id_pendaftaran; }
     public function getNama() { return $this->nama_calon; }
     public function getAsalSekolah() { return $this->asal_sekolah; }
