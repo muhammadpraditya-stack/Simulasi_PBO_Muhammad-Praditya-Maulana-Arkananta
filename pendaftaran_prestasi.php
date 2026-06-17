@@ -16,9 +16,12 @@ class PendaftaranPrestasi extends Pendaftaran {
         $this->tingkatPrestasi         = $data['tingkat_prestasi'];
     }
 
-    public function getDaftarPrestasi() {
+    // DIUBAH MENJADI STATIC FUNCTION
+    public static function getDaftarPrestasi() {
+        $db = new Database();
         $query = "SELECT * FROM tabel_pendaftaran WHERE jalur_pendaftaran = 'Prestasi'";
-        $result = $this->koneksi->query($query);
+        $result = $db->koneksi->query($query);
+        
         $daftar = [];
         if ($result && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
@@ -28,11 +31,7 @@ class PendaftaranPrestasi extends Pendaftaran {
         return $daftar;
     }
 
-    // =========================================================================
-    // METHOD OVERRIDING - JALUR PRESTASI
-    // =========================================================================
     public function hitungTotalBiaya() {
-        // Biaya dasar dikurangi potongan apresiasi Rp50.000
         return $this->biayaPendaftaranDasar - 50000;
     }
 

@@ -16,9 +16,12 @@ class PendaftaranKedinasan extends Pendaftaran {
         $this->instansiSponsor         = $data['instansi_sponsor'];
     }
 
-    public function getDaftarKedinasan() {
+    // DIUBAH MENJADI STATIC FUNCTION
+    public static function getDaftarKedinasan() {
+        $db = new Database();
         $query = "SELECT * FROM tabel_pendaftaran WHERE jalur_pendaftaran = 'Kedinasan'";
-        $result = $this->koneksi->query($query);
+        $result = $db->koneksi->query($query);
+        
         $daftar = [];
         if ($result && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
@@ -28,11 +31,7 @@ class PendaftaranKedinasan extends Pendaftaran {
         return $daftar;
     }
 
-    // =========================================================================
-    // METHOD OVERRIDING - JALUR KEDINASAN
-    // =========================================================================
     public function hitungTotalBiaya() {
-        // Biaya dasar dikenakan tambahan 25%
         return $this->biayaPendaftaranDasar * 1.25;
     }
 

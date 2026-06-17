@@ -1,6 +1,6 @@
 <?php
 require_once 'pendaftaran.php';
-
+// pbo
 class PendaftaranReguler extends Pendaftaran {
     private $pilihanProdi;
     private $lokasiKampus;
@@ -16,9 +16,12 @@ class PendaftaranReguler extends Pendaftaran {
         $this->lokasiKampus           = $data['lokasi_kampus'];
     }
 
-    public function getDaftarReguler() {
+    // DIUBAH MENJADI STATIC FUNCTION
+    public static function getDaftarReguler() {
+        $db = new Database(); // Membuat instansiasi koneksi lokal di dalam method static
         $query = "SELECT * FROM tabel_pendaftaran WHERE jalur_pendaftaran = 'Reguler'";
-        $result = $this->koneksi->query($query);
+        $result = $db->koneksi->query($query);
+        
         $daftar = [];
         if ($result && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
@@ -28,11 +31,7 @@ class PendaftaranReguler extends Pendaftaran {
         return $daftar;
     }
 
-    // =========================================================================
-    // METHOD OVERRIDING - JALUR REGULER
-    // =========================================================================
     public function hitungTotalBiaya() {
-        // Tarif standar murni
         return $this->biayaPendaftaranDasar;
     }
 
